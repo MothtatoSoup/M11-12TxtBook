@@ -11,7 +11,7 @@
  */
 
 window.addEventListener("load", playDrawPoker);
-
+ 
 function playDrawPoker() {
    // Reference buttons and images within the Poker Game page
    let dealButton = document.getElementById("dealB");
@@ -22,7 +22,25 @@ function playDrawPoker() {
    let betSelection = document.getElementById("bet");
    let bankBox = document.getElementById("bank");
    let cardImages = document.querySelectorAll("img.cardImg");
-    
+
+   // Set the initial bank and bet values
+   pokerGame.currentBank = 500;
+   pokerGame.currentBet = 25; 
+
+   // create a deck of shuffled cards
+   let myDeck = new pokerDeck();
+   myDeck.shuffle();
+
+   //create an empty poker hand object
+   let myHand = new pokerHand(5);
+
+   // Display the current bank value
+   bankBox.value = pokerGame.currentBank;
+
+   // Change the bet when the selection changes
+   betSelection.onchange = function(){
+      pokerGame.currentBet = parseInt(this.value);
+   }
    
       dealButton.addEventListener("click", function() {
       if (pokerGame.currentBank >= pokerGame.currentBet) {
@@ -33,8 +51,28 @@ function playDrawPoker() {
          standButton.disabled = false;      // Turn on the Stand Button
          statusBox.textContent = "";        // Erase any status messages
          
+         // Reduce the bank by the size of the bet
+         bankBox.value = pokerGame.placeBet()
 
-   });
+         // Get a new deck if there are less than 10 cards left
+         if (myDeck.cards.length < 10){
+            myDeck = new pokerDeck();
+            myDeck.shuffle();
+         }
+
+         // Deal 5 cards from the deck to the hand
+         myDeck.dealTo(myHand);
+         console.log(myDeck, myHand);
+
+         //Display the card images on the table
+         for (let i = 0; i < cardImages.length; i++){
+            cardImages[i].src = myHand.cards[i].cardImage();
+         }
+
+      } else {
+         statusBox.textContent = "Insufficient Funds";
+      }
+      });
    
    
    drawButton.addEventListener("click", function() {

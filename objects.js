@@ -10,10 +10,61 @@
 
       Filename:       objects.js
  */
+ 
+let pokerGame = {
+   currentBank: null,
+   currentBet: null,
+   placeBet: function(){
+      this.currentBank -= this.currentBet;
+      return this.currentBank;
+   }
+};
+// constructor object for poker cards
+function pokerCard(cardSuit, cardRank) {
+   this.suit = cardSuit
+   this.rank = cardRank
+};
+
+//method to reference the image src file fa card
+pokerCard.prototype.cardImage = function(){
+   return this.rank + "_" + this.suit + ".png";
+}
 
 
+//constructor object for poker decks
+function pokerDeck(){
+   //List the suits and ranks
+   let suits = ["clubs","diamonds","hearts","spades"];
+   let  ranks = ["2","3","4","5","6","7","8","9","10","jack","queen","king","ace"];
+   this.cards = [];
 
+   //add a card for each of the combos of suiut and rank
+   for (let i = 0; i < 4; i++){
+      for (let j = 0; j < 13;j++){
+         // add a poker card object
+         this.cards.push(new pokerCard(suits[i], ranks[[j]]))
+      }
+   }
 
+   //Methpd to randomly sort the cards in the deck
+   this.shuffle = function(){
+      this.cards.sort(function(){
+         return 0.5 - Math.random();
+      });
+   };
+
+   // Method to deal cards from the deck into a hand
+   this.dealTo = function(pokerHand){
+      let cardsDealt = pokerHand.cards.length;
+      pokerHand.cards = this.cards.splice(0, cardsDealt);
+   };
+
+};
+
+   // Cunstructor function for poker hands
+   function pokerHand(handLength){
+      this.cards = new Array(handLength);
+   }
 
 
 

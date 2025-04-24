@@ -64,6 +64,11 @@ function pokerDeck(){
    // Cunstructor function for poker hands
    function pokerHand(handLength){
       this.cards = new Array(handLength);
+
+      //Mthod to replace a card in a hand w/ a card frm a deck
+      pokerHand.prototype.replaceCard = function(index, pokerDeck){
+         this.cards[index] = pokerDeck.cards.shift();
+      }
    }
 
 
